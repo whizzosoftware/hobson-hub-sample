@@ -17,6 +17,8 @@ import java.util.Dictionary;
 public class SamplePlugin extends AbstractHobsonPlugin {
     private static final Logger logger = LoggerFactory.getLogger(SamplePlugin.class);
 
+    private SampleThermostatDevice thermostat;
+
     public SamplePlugin(String pluginId) {
         super(pluginId);
     }
@@ -30,11 +32,12 @@ public class SamplePlugin extends AbstractHobsonPlugin {
     public void onStartup(Dictionary config) {
         logger.info("Plugin is starting up");
 
+        thermostat = new SampleThermostatDevice(this, "thermostat");
+
         publishDevice(new SampleLightbulbDevice(this, "bulb"));
         publishDevice(new SampleSwitchDevice(this, "switch"));
         publishDevice(new SampleCameraDevice(this, "camera"));
-        publishDevice(new SampleNestStyleThermostatDevice(this, "Nesty"));
-        publishDevice(new SampleTraditionalThermostat(this, "Thermostat"));
+        publishDevice(thermostat);
 
         setStatus(new PluginStatus(PluginStatus.Status.RUNNING));
     }
@@ -46,11 +49,12 @@ public class SamplePlugin extends AbstractHobsonPlugin {
 
     @Override
     public long getRefreshInterval() {
-        return 0;
+        return 30;
     }
 
     @Override
     public void onRefresh() {
+        thermostat.onRefresh();
     }
 
     @Override

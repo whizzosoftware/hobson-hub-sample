@@ -13,14 +13,17 @@ import com.whizzosoftware.hobson.api.plugin.HobsonPlugin;
 import com.whizzosoftware.hobson.api.variable.HobsonVariable;
 import com.whizzosoftware.hobson.api.variable.VariableConstants;
 
-public class SampleNestStyleThermostatDevice extends AbstractHobsonDevice {
-    public SampleNestStyleThermostatDevice(HobsonPlugin plugin, String id) {
+public class SampleThermostatDevice extends AbstractHobsonDevice {
+    public SampleThermostatDevice(HobsonPlugin plugin, String id) {
         super(plugin, id);
     }
 
+    private int currentTemp = 73;
+    private long lastTempChange = System.currentTimeMillis();
+
     @Override
     public void onStartup() {
-        publishVariable(VariableConstants.TEMP_F, 73, HobsonVariable.Mask.READ_ONLY);
+        publishVariable(VariableConstants.TEMP_F, currentTemp, HobsonVariable.Mask.READ_ONLY);
         publishVariable(VariableConstants.TARGET_TEMP_F, 74, HobsonVariable.Mask.READ_WRITE);
     }
 
@@ -35,7 +38,7 @@ public class SampleNestStyleThermostatDevice extends AbstractHobsonDevice {
 
     @Override
     public String getDefaultName() {
-        return "Nest-style Thermostat";
+        return "Thermostat";
     }
 
     @Override
@@ -44,7 +47,30 @@ public class SampleNestStyleThermostatDevice extends AbstractHobsonDevice {
     }
 
     @Override
+    public String[] getTelemetryVariableNames() {
+        return new String[] {VariableConstants.TEMP_F, VariableConstants.TARGET_TEMP_F};
+    }
+
+    @Override
     public void onSetVariable(String name, Object value) {
         fireVariableUpdateNotification(name, value);
+    }
+
+    public void onRefresh() {
+        long now = System.currentTimeMillis();
+
+        // if 5 minutes have passed, change the current temperature
+        if (now - lastTempChange >= 300000) {
+            updateCurrentTemp(now);
+            fireVariableUpdateNotification(VariableConstants.TEMP_F, currentTemp);
+        }
+    }
+
+    protected void updateCurrentTemp(long now) {
+        currentTemp--;
+        if (currentTemp < 69) {
+            currentTemp = 73;
+        }
+        lastTempChange = now;
     }
 }
