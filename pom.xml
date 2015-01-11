@@ -3,7 +3,7 @@
     <groupId>com.whizzosoftware.hobson.hub</groupId>
     <artifactId>hobson-hub-sample</artifactId>
     <packaging>bundle</packaging>
-    <version>0.2.0</version>
+    <version>0.2.1-SNAPSHOT</version>
     <name>Sample Plugin</name>
     <description>Provides some sample devices for testing purposes.</description>
     <dependencies>
@@ -98,7 +98,7 @@
     <scm>
         <connection>scm:git:ssh://git@github.com/whizzosoftware/hobson-hub-sample.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/whizzosoftware/hobson-hub-sample.git</developerConnection>
-        <tag>hobson-hub-sample-0.2.0</tag>
+        <tag>HEAD</tag>
     </scm>
     <distributionManagement>
         <repository>
