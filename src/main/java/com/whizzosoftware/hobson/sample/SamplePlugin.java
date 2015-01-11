@@ -66,6 +66,6 @@ public class SamplePlugin extends AbstractHobsonPlugin {
     public void onSetDeviceVariable(String deviceId, String variableName, Object value) {
         logger.info("Received set device variable request: {}, {}, {}", deviceId, variableName, value);
 
-        getDevice(deviceId).onSetVariable(variableName, value);
+        getDevice(deviceId).getRuntime().onSetVariable(variableName, value);
     }
 }
