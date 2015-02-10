@@ -7,6 +7,7 @@
  *******************************************************************************/
 package com.whizzosoftware.hobson.sample;
 
+import com.whizzosoftware.hobson.api.config.Configuration;
 import com.whizzosoftware.hobson.api.plugin.AbstractHobsonPlugin;
 import com.whizzosoftware.hobson.api.plugin.PluginStatus;
 import org.slf4j.Logger;
@@ -29,7 +30,7 @@ public class SamplePlugin extends AbstractHobsonPlugin {
     }
 
     @Override
-    public void onStartup(Dictionary config) {
+    public void onStartup(Configuration config) {
         logger.info("Plugin is starting up");
 
         thermostat = new SampleThermostatDevice(this, "thermostat");
@@ -58,7 +59,7 @@ public class SamplePlugin extends AbstractHobsonPlugin {
     }
 
     @Override
-    public void onPluginConfigurationUpdate(Dictionary config) {
+    public void onPluginConfigurationUpdate(Configuration config) {
         logger.info("Received plugin configuration update");
     }
 

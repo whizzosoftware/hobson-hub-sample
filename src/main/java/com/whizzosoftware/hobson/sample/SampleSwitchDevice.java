@@ -7,6 +7,7 @@
  *******************************************************************************/
 package com.whizzosoftware.hobson.sample;
 
+import com.whizzosoftware.hobson.api.config.Configuration;
 import com.whizzosoftware.hobson.api.device.AbstractHobsonDevice;
 import com.whizzosoftware.hobson.api.device.DeviceType;
 import com.whizzosoftware.hobson.api.plugin.HobsonPlugin;
@@ -19,7 +20,7 @@ public class SampleSwitchDevice extends AbstractHobsonDevice {
     }
 
     @Override
-    public void onStartup() {
+    public void onStartup(Configuration config) {
         publishVariable(VariableConstants.ON, false, HobsonVariable.Mask.READ_WRITE);
     }
 

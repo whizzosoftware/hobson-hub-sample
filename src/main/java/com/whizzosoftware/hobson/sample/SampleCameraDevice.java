@@ -7,6 +7,7 @@
  *******************************************************************************/
 package com.whizzosoftware.hobson.sample;
 
+import com.whizzosoftware.hobson.api.config.Configuration;
 import com.whizzosoftware.hobson.api.config.ConfigurationPropertyMetaData;
 import com.whizzosoftware.hobson.api.device.AbstractHobsonDevice;
 import com.whizzosoftware.hobson.api.device.DeviceType;
@@ -20,14 +21,14 @@ public class SampleCameraDevice extends AbstractHobsonDevice {
 
     public SampleCameraDevice(HobsonPlugin plugin, String id) {
         super(plugin, id);
-    }
 
-    @Override
-    public void onStartup() {
         // publish configuration metadata
         addConfigurationMetaData(new ConfigurationPropertyMetaData(CONFIG_USERNAME, "Username", "A username that can access the camera", ConfigurationPropertyMetaData.Type.STRING));
         addConfigurationMetaData(new ConfigurationPropertyMetaData(CONFIG_PASSWORD, "Password", "The password for the user", ConfigurationPropertyMetaData.Type.PASSWORD));
+    }
 
+    @Override
+    public void onStartup(Configuration config) {
         publishVariable(VariableConstants.IMAGE_STATUS_URL, "http://hobson-automation.com/img/security-example.jpg", HobsonVariable.Mask.READ_ONLY);
     }
 

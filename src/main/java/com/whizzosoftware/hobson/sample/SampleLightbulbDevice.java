@@ -7,6 +7,8 @@
  *******************************************************************************/
 package com.whizzosoftware.hobson.sample;
 
+import com.whizzosoftware.hobson.api.config.Configuration;
+import com.whizzosoftware.hobson.api.config.ConfigurationPropertyMetaData;
 import com.whizzosoftware.hobson.api.device.AbstractHobsonDevice;
 import com.whizzosoftware.hobson.api.device.DeviceType;
 import com.whizzosoftware.hobson.api.plugin.HobsonPlugin;
@@ -23,7 +25,7 @@ public class SampleLightbulbDevice extends AbstractHobsonDevice {
     }
 
     @Override
-    public void onStartup() {
+    public void onStartup(Configuration config) {
         logger.info("Lighbulb device is starting");
 
         publishVariable(VariableConstants.COLOR, "#0000ff", HobsonVariable.Mask.READ_WRITE);

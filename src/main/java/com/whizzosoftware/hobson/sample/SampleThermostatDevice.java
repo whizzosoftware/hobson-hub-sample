@@ -7,6 +7,7 @@
  *******************************************************************************/
 package com.whizzosoftware.hobson.sample;
 
+import com.whizzosoftware.hobson.api.config.Configuration;
 import com.whizzosoftware.hobson.api.device.AbstractHobsonDevice;
 import com.whizzosoftware.hobson.api.device.DeviceType;
 import com.whizzosoftware.hobson.api.plugin.HobsonPlugin;
@@ -22,7 +23,7 @@ public class SampleThermostatDevice extends AbstractHobsonDevice {
     private long lastTempChange = System.currentTimeMillis();
 
     @Override
-    public void onStartup() {
+    public void onStartup(Configuration config) {
         publishVariable(VariableConstants.TEMP_F, currentTemp, HobsonVariable.Mask.READ_ONLY);
         publishVariable(VariableConstants.TARGET_TEMP_F, 74, HobsonVariable.Mask.READ_WRITE);
     }
