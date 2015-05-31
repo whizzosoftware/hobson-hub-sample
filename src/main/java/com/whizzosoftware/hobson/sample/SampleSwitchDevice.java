@@ -8,6 +8,7 @@
 package com.whizzosoftware.hobson.sample;
 
 import com.whizzosoftware.hobson.api.config.Configuration;
+import com.whizzosoftware.hobson.api.config.ConfigurationPropertyMetaData;
 import com.whizzosoftware.hobson.api.device.AbstractHobsonDevice;
 import com.whizzosoftware.hobson.api.device.DeviceType;
 import com.whizzosoftware.hobson.api.plugin.HobsonPlugin;
@@ -17,6 +18,11 @@ import com.whizzosoftware.hobson.api.variable.VariableConstants;
 public class SampleSwitchDevice extends AbstractHobsonDevice {
     public SampleSwitchDevice(HobsonPlugin plugin, String id) {
         super(plugin, id);
+    }
+
+    @Override
+    public ConfigurationPropertyMetaData[] createConfigurationPropertyMetaData() {
+        return null;
     }
 
     @Override

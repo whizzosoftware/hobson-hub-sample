@@ -25,6 +25,11 @@ public class SampleLightbulbDevice extends AbstractHobsonDevice {
     }
 
     @Override
+    public ConfigurationPropertyMetaData[] createConfigurationPropertyMetaData() {
+        return null;
+    }
+
+    @Override
     public void onStartup(Configuration config) {
         logger.info("Lighbulb device is starting");
 
@@ -57,6 +62,8 @@ public class SampleLightbulbDevice extends AbstractHobsonDevice {
     @Override
     public void onSetVariable(String name, Object value) {
         logger.info("Received set device variable request: {}, {}", name, value);
+
+        // TODO: control device
 
         fireVariableUpdateNotification(name, value);
     }

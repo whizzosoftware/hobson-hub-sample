@@ -4,7 +4,7 @@
     <artifactId>hobson-hub-sample</artifactId>
     <packaging>bundle</packaging>
     <version>0.4.0-SNAPSHOT</version>
-    <name>Sample Plugin</name>
+    <name>Sample Devices</name>
     <description>Provides some sample devices for testing purposes.</description>
     <dependencies>
         <dependency>

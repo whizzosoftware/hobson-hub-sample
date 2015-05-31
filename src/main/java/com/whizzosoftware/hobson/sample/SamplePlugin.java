@@ -8,12 +8,11 @@
 package com.whizzosoftware.hobson.sample;
 
 import com.whizzosoftware.hobson.api.config.Configuration;
+import com.whizzosoftware.hobson.api.device.DeviceContext;
 import com.whizzosoftware.hobson.api.plugin.AbstractHobsonPlugin;
 import com.whizzosoftware.hobson.api.plugin.PluginStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Dictionary;
 
 public class SamplePlugin extends AbstractHobsonPlugin {
     private static final Logger logger = LoggerFactory.getLogger(SamplePlugin.class);
@@ -64,9 +63,9 @@ public class SamplePlugin extends AbstractHobsonPlugin {
     }
 
     @Override
-    public void onSetDeviceVariable(String deviceId, String variableName, Object value) {
-        logger.info("Received set device variable request: {}, {}, {}", deviceId, variableName, value);
+    public void onSetDeviceVariable(DeviceContext ctx, String variableName, Object value) {
+        logger.info("Received set device variable request: {}, {}, {}", ctx, variableName, value);
 
-        getDevice(deviceId).getRuntime().onSetVariable(variableName, value);
+        getDevice(ctx).getRuntime().onSetVariable(variableName, value);
     }
 }
