@@ -7,11 +7,11 @@
  *******************************************************************************/
 package com.whizzosoftware.hobson.sample;
 
-import com.whizzosoftware.hobson.api.config.Configuration;
-import com.whizzosoftware.hobson.api.config.ConfigurationPropertyMetaData;
 import com.whizzosoftware.hobson.api.device.AbstractHobsonDevice;
 import com.whizzosoftware.hobson.api.device.DeviceType;
 import com.whizzosoftware.hobson.api.plugin.HobsonPlugin;
+import com.whizzosoftware.hobson.api.property.PropertyContainer;
+import com.whizzosoftware.hobson.api.property.TypedProperty;
 import com.whizzosoftware.hobson.api.variable.HobsonVariable;
 import com.whizzosoftware.hobson.api.variable.VariableConstants;
 import com.whizzosoftware.hobson.api.variable.VariableProxyType;
@@ -25,15 +25,15 @@ public class SampleCameraDevice extends AbstractHobsonDevice {
     }
 
     @Override
-    public ConfigurationPropertyMetaData[] createConfigurationPropertyMetaData() {
-        return new ConfigurationPropertyMetaData[] {
-            new ConfigurationPropertyMetaData(CONFIG_USERNAME, "Username", "A username that can access the camera", ConfigurationPropertyMetaData.Type.STRING),
-            new ConfigurationPropertyMetaData(CONFIG_PASSWORD, "Password", "The password for the user", ConfigurationPropertyMetaData.Type.PASSWORD)
+    public TypedProperty[] createConfigurationPropertyMetaData() {
+        return new TypedProperty[] {
+            new TypedProperty(CONFIG_USERNAME, "Username", "A username that can access the camera", TypedProperty.Type.STRING),
+            new TypedProperty(CONFIG_PASSWORD, "Password", "The password for the user", TypedProperty.Type.SECURE_STRING)
         };
     }
 
     @Override
-    public void onStartup(Configuration config) {
+    public void onStartup(PropertyContainer config) {
         publishVariable(VariableConstants.IMAGE_STATUS_URL, "http://hobson-automation.com/img/security-example.jpg", HobsonVariable.Mask.READ_ONLY, VariableProxyType.MEDIA_URL);
     }
 

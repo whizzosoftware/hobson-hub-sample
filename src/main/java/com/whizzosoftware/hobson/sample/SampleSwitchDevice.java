@@ -7,11 +7,11 @@
  *******************************************************************************/
 package com.whizzosoftware.hobson.sample;
 
-import com.whizzosoftware.hobson.api.config.Configuration;
-import com.whizzosoftware.hobson.api.config.ConfigurationPropertyMetaData;
 import com.whizzosoftware.hobson.api.device.AbstractHobsonDevice;
 import com.whizzosoftware.hobson.api.device.DeviceType;
 import com.whizzosoftware.hobson.api.plugin.HobsonPlugin;
+import com.whizzosoftware.hobson.api.property.PropertyContainer;
+import com.whizzosoftware.hobson.api.property.TypedProperty;
 import com.whizzosoftware.hobson.api.variable.HobsonVariable;
 import com.whizzosoftware.hobson.api.variable.VariableConstants;
 
@@ -21,12 +21,12 @@ public class SampleSwitchDevice extends AbstractHobsonDevice {
     }
 
     @Override
-    public ConfigurationPropertyMetaData[] createConfigurationPropertyMetaData() {
+    public TypedProperty[] createConfigurationPropertyMetaData() {
         return null;
     }
 
     @Override
-    public void onStartup(Configuration config) {
+    public void onStartup(PropertyContainer config) {
         publishVariable(VariableConstants.ON, false, HobsonVariable.Mask.READ_WRITE);
     }
 
