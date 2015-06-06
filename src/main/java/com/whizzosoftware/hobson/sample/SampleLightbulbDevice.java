@@ -31,6 +31,8 @@ public class SampleLightbulbDevice extends AbstractHobsonDevice {
 
     @Override
     public void onStartup(PropertyContainer config) {
+        super.onStartup(config);
+
         logger.info("Lighbulb device is starting");
 
         publishVariable(VariableConstants.COLOR, "#0000ff", HobsonVariable.Mask.READ_WRITE);
