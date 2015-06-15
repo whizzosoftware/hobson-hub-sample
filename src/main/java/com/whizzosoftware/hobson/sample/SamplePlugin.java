@@ -39,7 +39,7 @@ public class SamplePlugin extends AbstractHobsonPlugin {
         publishDevice(new SampleCameraDevice(this, "camera"));
         publishDevice(thermostat);
 
-        setStatus(new PluginStatus(PluginStatus.Status.RUNNING));
+        setStatus(new PluginStatus(PluginStatus.Code.RUNNING));
     }
 
     @Override
