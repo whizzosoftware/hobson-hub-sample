@@ -11,7 +11,6 @@ import com.whizzosoftware.hobson.api.device.AbstractHobsonDevice;
 import com.whizzosoftware.hobson.api.device.DeviceType;
 import com.whizzosoftware.hobson.api.plugin.HobsonPlugin;
 import com.whizzosoftware.hobson.api.property.PropertyContainer;
-import com.whizzosoftware.hobson.api.property.TypedProperty;
 import com.whizzosoftware.hobson.api.variable.HobsonVariable;
 import com.whizzosoftware.hobson.api.variable.VariableConstants;
 import org.slf4j.Logger;
@@ -22,11 +21,6 @@ public class SampleLightbulbDevice extends AbstractHobsonDevice {
 
     public SampleLightbulbDevice(HobsonPlugin plugin, String id) {
         super(plugin, id);
-    }
-
-    @Override
-    public TypedProperty[] createConfigurationPropertyMetaData() {
-        return null;
     }
 
     @Override
