@@ -11,6 +11,7 @@ import com.whizzosoftware.hobson.api.device.DeviceContext;
 import com.whizzosoftware.hobson.api.plugin.AbstractHobsonPlugin;
 import com.whizzosoftware.hobson.api.plugin.PluginStatus;
 import com.whizzosoftware.hobson.api.property.PropertyContainer;
+import com.whizzosoftware.hobson.api.property.TypedProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,6 +46,11 @@ public class SamplePlugin extends AbstractHobsonPlugin {
     @Override
     public void onShutdown() {
         logger.info("Plugin is shutting down");
+    }
+
+    @Override
+    protected TypedProperty[] createSupportedProperties() {
+        return null;
     }
 
     @Override

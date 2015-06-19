@@ -22,9 +22,6 @@ public class SampleCameraDevice extends AbstractHobsonDevice {
 
     public SampleCameraDevice(HobsonPlugin plugin, String id) {
         super(plugin, id);
-
-        addSupportedProperty(new TypedProperty(CONFIG_USERNAME, "Username", "A username that can access the camera", TypedProperty.Type.STRING));
-        addSupportedProperty(new TypedProperty(CONFIG_PASSWORD, "Password", "The password for the user", TypedProperty.Type.SECURE_STRING));
     }
 
     @Override
@@ -51,6 +48,14 @@ public class SampleCameraDevice extends AbstractHobsonDevice {
     @Override
     public String getPreferredVariableName() {
         return VariableConstants.IMAGE_STATUS_URL;
+    }
+
+    @Override
+    protected TypedProperty[] createSupportedProperties() {
+        return new TypedProperty[] {
+            new TypedProperty(CONFIG_USERNAME, "Username", "A username that can access the camera", TypedProperty.Type.STRING),
+            new TypedProperty(CONFIG_PASSWORD, "Password", "The password for the user", TypedProperty.Type.SECURE_STRING)
+        };
     }
 
     @Override

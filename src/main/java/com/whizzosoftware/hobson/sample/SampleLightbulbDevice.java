@@ -11,6 +11,7 @@ import com.whizzosoftware.hobson.api.device.AbstractHobsonDevice;
 import com.whizzosoftware.hobson.api.device.DeviceType;
 import com.whizzosoftware.hobson.api.plugin.HobsonPlugin;
 import com.whizzosoftware.hobson.api.property.PropertyContainer;
+import com.whizzosoftware.hobson.api.property.TypedProperty;
 import com.whizzosoftware.hobson.api.variable.HobsonVariable;
 import com.whizzosoftware.hobson.api.variable.VariableConstants;
 import org.slf4j.Logger;
@@ -53,6 +54,11 @@ public class SampleLightbulbDevice extends AbstractHobsonDevice {
     @Override
     public String getPreferredVariableName() {
         return VariableConstants.ON;
+    }
+
+    @Override
+    protected TypedProperty[] createSupportedProperties() {
+        return null;
     }
 
     @Override

@@ -11,6 +11,7 @@ import com.whizzosoftware.hobson.api.device.AbstractHobsonDevice;
 import com.whizzosoftware.hobson.api.device.DeviceType;
 import com.whizzosoftware.hobson.api.plugin.HobsonPlugin;
 import com.whizzosoftware.hobson.api.property.PropertyContainer;
+import com.whizzosoftware.hobson.api.property.TypedProperty;
 import com.whizzosoftware.hobson.api.variable.HobsonVariable;
 import com.whizzosoftware.hobson.api.variable.VariableConstants;
 
@@ -52,6 +53,11 @@ public class SampleThermostatDevice extends AbstractHobsonDevice {
     @Override
     public String[] getTelemetryVariableNames() {
         return new String[] {VariableConstants.TEMP_F, VariableConstants.TARGET_TEMP_F};
+    }
+
+    @Override
+    protected TypedProperty[] createSupportedProperties() {
+        return null;
     }
 
     @Override
