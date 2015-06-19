@@ -7,7 +7,6 @@
  *******************************************************************************/
 package com.whizzosoftware.hobson.sample;
 
-import com.whizzosoftware.hobson.api.device.DeviceContext;
 import com.whizzosoftware.hobson.api.plugin.AbstractHobsonPlugin;
 import com.whizzosoftware.hobson.api.plugin.PluginStatus;
 import com.whizzosoftware.hobson.api.property.PropertyContainer;
@@ -66,12 +65,5 @@ public class SamplePlugin extends AbstractHobsonPlugin {
     @Override
     public void onPluginConfigurationUpdate(PropertyContainer config) {
         logger.info("Received plugin configuration update");
-    }
-
-    @Override
-    public void onSetDeviceVariable(DeviceContext ctx, String variableName, Object value) {
-        logger.info("Received set device variable request: {}, {}, {}", ctx, variableName, value);
-
-        getDevice(ctx).getRuntime().onSetVariable(variableName, value);
     }
 }
