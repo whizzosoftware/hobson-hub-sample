@@ -27,7 +27,7 @@ public class SampleThermostatDevice extends AbstractHobsonDevice {
     public void onStartup(PropertyContainer config) {
         super.onStartup(config);
 
-        publishVariable(VariableConstants.TEMP_F, currentTemp, HobsonVariable.Mask.READ_ONLY);
+        publishVariable(VariableConstants.INDOOR_TEMP_F, currentTemp, HobsonVariable.Mask.READ_ONLY);
         publishVariable(VariableConstants.TARGET_TEMP_F, 74, HobsonVariable.Mask.READ_WRITE);
     }
 
@@ -47,12 +47,12 @@ public class SampleThermostatDevice extends AbstractHobsonDevice {
 
     @Override
     public String getPreferredVariableName() {
-        return VariableConstants.TEMP_F;
+        return VariableConstants.INDOOR_TEMP_F;
     }
 
     @Override
     public String[] getTelemetryVariableNames() {
-        return new String[] {VariableConstants.TEMP_F, VariableConstants.TARGET_TEMP_F};
+        return new String[] {VariableConstants.INDOOR_TEMP_F, VariableConstants.TARGET_TEMP_F};
     }
 
     @Override
@@ -71,7 +71,7 @@ public class SampleThermostatDevice extends AbstractHobsonDevice {
         // if 5 minutes have passed, change the current temperature
         if (now - lastTempChange >= 300000) {
             updateCurrentTemp(now);
-            fireVariableUpdateNotification(VariableConstants.TEMP_F, currentTemp);
+            fireVariableUpdateNotification(VariableConstants.INDOOR_TEMP_F, currentTemp);
         }
     }
 
