@@ -37,6 +37,7 @@ public class SamplePlugin extends AbstractHobsonPlugin {
         publishDevice(new SampleLightbulbDevice(this, "bulb"));
         publishDevice(new SampleSwitchDevice(this, "switch"));
         publishDevice(new SampleCameraDevice(this, "camera"));
+        publishDevice(new WeatherStationDevice(this, "wstation"));
         publishDevice(thermostat);
 
         setStatus(new PluginStatus(PluginStatus.Code.RUNNING));
