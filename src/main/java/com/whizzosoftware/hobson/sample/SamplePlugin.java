@@ -17,7 +17,11 @@ import org.slf4j.LoggerFactory;
 public class SamplePlugin extends AbstractHobsonPlugin {
     private static final Logger logger = LoggerFactory.getLogger(SamplePlugin.class);
 
+    private SampleLightbulbDevice bulb;
+    private SampleSwitchDevice sw;
+    private SampleCameraDevice camera;
     private SampleThermostatDevice thermostat;
+    private WeatherStationDevice ws;
 
     public SamplePlugin(String pluginId) {
         super(pluginId);
@@ -32,12 +36,16 @@ public class SamplePlugin extends AbstractHobsonPlugin {
     public void onStartup(PropertyContainer config) {
         logger.info("Plugin is starting up");
 
+        bulb = new SampleLightbulbDevice(this, "bulb");
+        sw = new SampleSwitchDevice(this, "switch");
+        camera = new SampleCameraDevice(this, "camera");
+        ws = new WeatherStationDevice(this, "wstation");
         thermostat = new SampleThermostatDevice(this, "thermostat");
 
-        publishDevice(new SampleLightbulbDevice(this, "bulb"));
-        publishDevice(new SampleSwitchDevice(this, "switch"));
-        publishDevice(new SampleCameraDevice(this, "camera"));
-        publishDevice(new WeatherStationDevice(this, "wstation"));
+        publishDevice(bulb);
+        publishDevice(sw);
+        publishDevice(camera);
+        publishDevice(ws);
         publishDevice(thermostat);
 
         setStatus(new PluginStatus(PluginStatus.Code.RUNNING));
@@ -60,7 +68,16 @@ public class SamplePlugin extends AbstractHobsonPlugin {
 
     @Override
     public void onRefresh() {
-        thermostat.onRefresh();
+        long now = System.currentTimeMillis();
+
+        // check-in devices so they don't display as inactive
+        bulb.checkInDevice(now);
+        sw.checkInDevice(now);
+        camera.checkInDevice(now);
+        ws.checkInDevice(now);
+
+        // refresh the thermostat temperature
+        thermostat.onRefresh(now);
     }
 
     @Override
