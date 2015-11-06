@@ -58,7 +58,9 @@ public class SamplePlugin extends AbstractHobsonPlugin {
 
     @Override
     protected TypedProperty[] createSupportedProperties() {
-        return null;
+        return new TypedProperty[] {
+            new TypedProperty.Builder("test", "Test", "A test parameter", TypedProperty.Type.STRING).build()
+        };
     }
 
     @Override
