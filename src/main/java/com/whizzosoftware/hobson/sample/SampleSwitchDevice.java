@@ -41,6 +41,21 @@ public class SampleSwitchDevice extends AbstractHobsonDevice {
     }
 
     @Override
+    public String getManufacturerName() {
+        return "Whizzo Software LLC";
+    }
+
+    @Override
+    public String getManufacturerVersion() {
+        return "1.0";
+    }
+
+    @Override
+    public String getModelName() {
+        return "Sample Switch";
+    }
+
+    @Override
     public String getPreferredVariableName() {
         return VariableConstants.ON;
     }

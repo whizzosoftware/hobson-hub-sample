@@ -42,6 +42,21 @@ public class SampleCameraDevice extends AbstractHobsonDevice {
     }
 
     @Override
+    public String getManufacturerName() {
+        return "Whizzo Software LLC";
+    }
+
+    @Override
+    public String getManufacturerVersion() {
+        return "1.0";
+    }
+
+    @Override
+    public String getModelName() {
+        return "Sample Camera";
+    }
+
+    @Override
     public String getDefaultName() {
         return "Security Camera";
     }

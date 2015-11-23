@@ -42,6 +42,21 @@ public class WeatherStationDevice extends AbstractHobsonDevice {
     }
 
     @Override
+    public String getManufacturerName() {
+        return "Whizzo Software LLC";
+    }
+
+    @Override
+    public String getManufacturerVersion() {
+        return "1.0";
+    }
+
+    @Override
+    public String getModelName() {
+        return "Sample Weather Station";
+    }
+
+    @Override
     public String getPreferredVariableName() {
         return VariableConstants.OUTDOOR_TEMP_F;
     }

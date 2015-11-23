@@ -41,6 +41,21 @@ public class SampleThermostatDevice extends AbstractHobsonDevice {
     }
 
     @Override
+    public String getManufacturerName() {
+        return "Whizzo Software LLC";
+    }
+
+    @Override
+    public String getManufacturerVersion() {
+        return "1.0";
+    }
+
+    @Override
+    public String getModelName() {
+        return "Sample Thermostat";
+    }
+
+    @Override
     public String getDefaultName() {
         return "Thermostat";
     }
