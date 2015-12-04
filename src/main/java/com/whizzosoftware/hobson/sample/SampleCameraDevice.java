@@ -15,7 +15,7 @@ import com.whizzosoftware.hobson.api.property.PropertyContainer;
 import com.whizzosoftware.hobson.api.property.TypedProperty;
 import com.whizzosoftware.hobson.api.variable.HobsonVariable;
 import com.whizzosoftware.hobson.api.variable.VariableConstants;
-import com.whizzosoftware.hobson.api.variable.VariableProxyType;
+import com.whizzosoftware.hobson.api.variable.VariableMediaType;
 
 public class SampleCameraDevice extends AbstractHobsonDevice {
     public static final String CONFIG_USERNAME = "username";
@@ -29,7 +29,7 @@ public class SampleCameraDevice extends AbstractHobsonDevice {
     public void onStartup(PropertyContainer config) {
         super.onStartup(config);
 
-        publishVariable(VariableConstants.IMAGE_STATUS_URL, "http://hobson-automation.com/img/security-example.jpg", HobsonVariable.Mask.READ_ONLY, VariableProxyType.MEDIA);
+        publishVariable(VariableConstants.IMAGE_STATUS_URL, "http://hobson-automation.com/img/security-example.jpg", HobsonVariable.Mask.READ_ONLY, VariableMediaType.IMAGE_JPG);
     }
 
     @Override
