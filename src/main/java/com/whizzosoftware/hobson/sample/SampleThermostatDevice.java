@@ -80,14 +80,14 @@ public class SampleThermostatDevice extends AbstractHobsonDevice {
         fireVariableUpdateNotification(name, value);
     }
 
-    public void onRefresh(long now) {
+    public void onRefresh(boolean availability, long now) {
         // if 5 minutes have passed, change the current temperature
         if (now - lastTempChange >= 300000) {
             updateCurrentTemp(now);
             fireVariableUpdateNotification(VariableConstants.INDOOR_TEMP_F, currentTemp);
         }
 
-        checkInDevice(now);
+        setDeviceAvailability(availability, now);
     }
 
     protected void updateCurrentTemp(long now) {

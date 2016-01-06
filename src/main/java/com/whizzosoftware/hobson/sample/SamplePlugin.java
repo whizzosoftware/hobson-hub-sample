@@ -7,12 +7,16 @@
  *******************************************************************************/
 package com.whizzosoftware.hobson.sample;
 
+import com.whizzosoftware.hobson.api.device.DeviceContext;
 import com.whizzosoftware.hobson.api.plugin.AbstractHobsonPlugin;
 import com.whizzosoftware.hobson.api.plugin.PluginStatus;
 import com.whizzosoftware.hobson.api.property.PropertyContainer;
 import com.whizzosoftware.hobson.api.property.TypedProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SamplePlugin extends AbstractHobsonPlugin {
     private static final Logger logger = LoggerFactory.getLogger(SamplePlugin.class);
@@ -22,6 +26,7 @@ public class SamplePlugin extends AbstractHobsonPlugin {
     private SampleCameraDevice camera;
     private SampleThermostatDevice thermostat;
     private WeatherStationDevice ws;
+    private Map<String,Boolean> availMap = new HashMap<>();
 
     public SamplePlugin(String pluginId) {
         super(pluginId);
@@ -73,17 +78,27 @@ public class SamplePlugin extends AbstractHobsonPlugin {
         long now = System.currentTimeMillis();
 
         // check-in devices so they don't display as inactive
-        bulb.checkInDevice(now);
-        sw.checkInDevice(now);
-        camera.checkInDevice(now);
-        ws.checkInDevice(now);
+        bulb.setDeviceAvailability(getAvailability("bulb"), now);
+        sw.setDeviceAvailability(getAvailability("switch"), now);
+        camera.setDeviceAvailability(getAvailability("camera"), now);
+        ws.setDeviceAvailability(getAvailability("wstation"), now);
 
         // refresh the thermostat temperature
-        thermostat.onRefresh(now);
+        thermostat.onRefresh(getAvailability("thermostat"), now);
     }
 
     @Override
     public void onPluginConfigurationUpdate(PropertyContainer config) {
         logger.info("Received plugin configuration update");
+    }
+
+    public void setAvailability(String name, boolean avail) {
+        availMap.put(name, avail);
+        setDeviceAvailability(DeviceContext.createLocal("com.whizzosoftware.hobson.hub.hobson-hub-sample", name), avail, null);
+    }
+
+    public boolean getAvailability(String name) {
+        Boolean b = availMap.get(name);
+        return (b == null || b);
     }
 }
