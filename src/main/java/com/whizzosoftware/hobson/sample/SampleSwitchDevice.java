@@ -24,7 +24,7 @@ public class SampleSwitchDevice extends AbstractHobsonDevice {
     public void onStartup(PropertyContainer config) {
         super.onStartup(config);
 
-        publishVariable(VariableConstants.ON, false, HobsonVariable.Mask.READ_WRITE);
+        publishVariable(VariableConstants.ON, false, HobsonVariable.Mask.READ_WRITE, System.currentTimeMillis());
     }
 
     @Override

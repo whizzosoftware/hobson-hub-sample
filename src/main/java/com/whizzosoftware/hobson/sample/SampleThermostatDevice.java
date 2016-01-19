@@ -27,8 +27,8 @@ public class SampleThermostatDevice extends AbstractHobsonDevice {
     public void onStartup(PropertyContainer config) {
         super.onStartup(config);
 
-        publishVariable(VariableConstants.INDOOR_TEMP_F, currentTemp, HobsonVariable.Mask.READ_ONLY);
-        publishVariable(VariableConstants.TARGET_TEMP_F, 74, HobsonVariable.Mask.READ_WRITE);
+        publishVariable(VariableConstants.INDOOR_TEMP_F, currentTemp, HobsonVariable.Mask.READ_ONLY, lastTempChange);
+        publishVariable(VariableConstants.TARGET_TEMP_F, 74, HobsonVariable.Mask.READ_WRITE, lastTempChange);
     }
 
     @Override

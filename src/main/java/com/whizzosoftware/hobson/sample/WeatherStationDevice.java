@@ -18,12 +18,13 @@ public class WeatherStationDevice extends AbstractHobsonDevice {
     public void onStartup(PropertyContainer config) {
         super.onStartup(config);
 
-        publishVariable(VariableConstants.OUTDOOR_TEMP_F, 74, HobsonVariable.Mask.READ_ONLY);
-        publishVariable(VariableConstants.INDOOR_TEMP_F, 76, HobsonVariable.Mask.READ_ONLY);
-        publishVariable(VariableConstants.INDOOR_RELATIVE_HUMIDITY, 32, HobsonVariable.Mask.READ_ONLY);
-        publishVariable(VariableConstants.OUTDOOR_RELATIVE_HUMIDITY, 30, HobsonVariable.Mask.READ_ONLY);
-        publishVariable(VariableConstants.WIND_SPEED_MPH, 2, HobsonVariable.Mask.READ_ONLY);
-        publishVariable(VariableConstants.WIND_DIRECTION_DEGREES, 270, HobsonVariable.Mask.READ_ONLY);
+        long now = System.currentTimeMillis();
+        publishVariable(VariableConstants.OUTDOOR_TEMP_F, 74, HobsonVariable.Mask.READ_ONLY, now);
+        publishVariable(VariableConstants.INDOOR_TEMP_F, 76, HobsonVariable.Mask.READ_ONLY, now);
+        publishVariable(VariableConstants.INDOOR_RELATIVE_HUMIDITY, 32, HobsonVariable.Mask.READ_ONLY, now);
+        publishVariable(VariableConstants.OUTDOOR_RELATIVE_HUMIDITY, 30, HobsonVariable.Mask.READ_ONLY, now);
+        publishVariable(VariableConstants.WIND_SPEED_MPH, 2, HobsonVariable.Mask.READ_ONLY, now);
+        publishVariable(VariableConstants.WIND_DIRECTION_DEGREES, 270, HobsonVariable.Mask.READ_ONLY, now);
     }
 
     @Override

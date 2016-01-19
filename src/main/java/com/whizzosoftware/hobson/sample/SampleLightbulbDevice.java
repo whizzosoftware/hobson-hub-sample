@@ -30,9 +30,10 @@ public class SampleLightbulbDevice extends AbstractHobsonDevice {
 
         logger.info("Lighbulb device is starting");
 
-        publishVariable(VariableConstants.COLOR, "#0000ff", HobsonVariable.Mask.READ_WRITE);
-        publishVariable(VariableConstants.LEVEL, 100, HobsonVariable.Mask.READ_WRITE);
-        publishVariable(VariableConstants.ON, true, HobsonVariable.Mask.READ_WRITE);
+        long now = System.currentTimeMillis();
+        publishVariable(VariableConstants.COLOR, "#0000ff", HobsonVariable.Mask.READ_WRITE, now);
+        publishVariable(VariableConstants.LEVEL, 100, HobsonVariable.Mask.READ_WRITE, now);
+        publishVariable(VariableConstants.ON, true, HobsonVariable.Mask.READ_WRITE, now);
     }
 
     @Override
