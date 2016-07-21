@@ -20,7 +20,7 @@ public class SampleThermostatDevice extends AbstractHobsonDevice {
         super(plugin, id);
     }
 
-    private double currentTemp = 73.0;
+    private double currentTemp = 73.123;
     private long lastTempChange = System.currentTimeMillis();
 
     @Override
@@ -66,11 +66,6 @@ public class SampleThermostatDevice extends AbstractHobsonDevice {
     }
 
     @Override
-    public String[] getTelemetryVariableNames() {
-        return new String[] {VariableConstants.INDOOR_TEMP_F, VariableConstants.TARGET_TEMP_F};
-    }
-
-    @Override
     protected TypedProperty[] createSupportedProperties() {
         return null;
     }
@@ -93,7 +88,7 @@ public class SampleThermostatDevice extends AbstractHobsonDevice {
     protected void updateCurrentTemp(long now) {
         currentTemp -= 0.5;
         if (currentTemp < 69) {
-            currentTemp = 73.0;
+            currentTemp = 73.123;
         }
         lastTempChange = now;
     }

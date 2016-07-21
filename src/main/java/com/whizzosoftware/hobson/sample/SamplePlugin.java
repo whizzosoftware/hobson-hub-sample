@@ -12,10 +12,13 @@ import com.whizzosoftware.hobson.api.plugin.AbstractHobsonPlugin;
 import com.whizzosoftware.hobson.api.plugin.PluginStatus;
 import com.whizzosoftware.hobson.api.property.PropertyContainer;
 import com.whizzosoftware.hobson.api.property.TypedProperty;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
 
 public class SamplePlugin extends AbstractHobsonPlugin {
@@ -52,6 +55,18 @@ public class SamplePlugin extends AbstractHobsonPlugin {
         publishDevice(camera);
         publishDevice(ws);
         publishDevice(thermostat);
+
+        BundleContext context = FrameworkUtil.getBundle(getClass()).getBundleContext();
+        Hashtable<String,Object> c = new Hashtable<>();
+        c.put("osgi.command.scope", "sample");
+        c.put("osgi.command.function", new String[] {
+                "avail"
+        });
+        context.registerService(
+            SampleCommandHandler.class.getName(),
+            new SampleCommandHandler(this),
+            c
+        );
 
         setStatus(new PluginStatus(PluginStatus.Code.RUNNING));
     }
