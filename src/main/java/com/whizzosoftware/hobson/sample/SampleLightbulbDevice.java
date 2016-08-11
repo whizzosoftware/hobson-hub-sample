@@ -7,21 +7,23 @@
  *******************************************************************************/
 package com.whizzosoftware.hobson.sample;
 
-import com.whizzosoftware.hobson.api.device.AbstractHobsonDevice;
 import com.whizzosoftware.hobson.api.device.DeviceType;
+import com.whizzosoftware.hobson.api.device.proxy.AbstractDeviceProxy;
 import com.whizzosoftware.hobson.api.plugin.HobsonPlugin;
 import com.whizzosoftware.hobson.api.property.PropertyContainer;
 import com.whizzosoftware.hobson.api.property.TypedProperty;
-import com.whizzosoftware.hobson.api.variable.HobsonVariable;
-import com.whizzosoftware.hobson.api.variable.VariableConstants;
+import com.whizzosoftware.hobson.api.variable.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SampleLightbulbDevice extends AbstractHobsonDevice {
+import java.util.HashMap;
+import java.util.Map;
+
+public class SampleLightbulbDevice extends AbstractDeviceProxy {
     private static final Logger logger = LoggerFactory.getLogger(SampleLightbulbDevice.class);
 
     public SampleLightbulbDevice(HobsonPlugin plugin, String id) {
-        super(plugin, id);
+        super(plugin, id, "Color LED Bulb");
     }
 
     @Override
@@ -30,10 +32,11 @@ public class SampleLightbulbDevice extends AbstractHobsonDevice {
 
         logger.info("Lighbulb device is starting");
 
-        long now = System.currentTimeMillis();
-        publishVariable(VariableConstants.COLOR, "#0000ff", HobsonVariable.Mask.READ_WRITE, now);
-        publishVariable(VariableConstants.LEVEL, 100, HobsonVariable.Mask.READ_WRITE, now);
-        publishVariable(VariableConstants.ON, true, HobsonVariable.Mask.READ_WRITE, now);
+        Map<String,Object> updates = new HashMap<>();
+        updates.put(VariableConstants.COLOR, "#0000ff");
+        updates.put(VariableConstants.LEVEL, 100);
+        updates.put(VariableConstants.ON, true);
+        setVariableValues(updates);
     }
 
     @Override
@@ -43,7 +46,12 @@ public class SampleLightbulbDevice extends AbstractHobsonDevice {
     }
 
     @Override
-    public DeviceType getType() {
+    public void onDeviceConfigurationUpdate(PropertyContainer config) {
+
+    }
+
+    @Override
+    public DeviceType getDeviceType() {
         return DeviceType.LIGHTBULB;
     }
 
@@ -63,17 +71,21 @@ public class SampleLightbulbDevice extends AbstractHobsonDevice {
     }
 
     @Override
-    public String getDefaultName() {
-        return "Color LED Bulb";
-    }
-
-    @Override
     public String getPreferredVariableName() {
         return VariableConstants.ON;
     }
 
     @Override
-    protected TypedProperty[] createSupportedProperties() {
+    public DeviceVariableDescription[] createVariableDescriptions() {
+        return new DeviceVariableDescription[] {
+            createDeviceVariableDescription(VariableConstants.COLOR, DeviceVariableDescription.Mask.READ_WRITE),
+            createDeviceVariableDescription(VariableConstants.LEVEL, DeviceVariableDescription.Mask.READ_WRITE),
+            createDeviceVariableDescription(VariableConstants.ON, DeviceVariableDescription.Mask.READ_WRITE)
+        };
+    }
+
+    @Override
+    protected TypedProperty[] createConfigurationPropertyTypes() {
         return null;
     }
 
@@ -83,6 +95,6 @@ public class SampleLightbulbDevice extends AbstractHobsonDevice {
 
         // TODO: control device
 
-        fireVariableUpdateNotification(name, value);
+        setVariableValue(name, value, System.currentTimeMillis());
     }
 }

@@ -7,29 +7,27 @@
  *******************************************************************************/
 package com.whizzosoftware.hobson.sample;
 
-import com.whizzosoftware.hobson.api.device.AbstractHobsonDevice;
 import com.whizzosoftware.hobson.api.device.DeviceType;
+import com.whizzosoftware.hobson.api.device.proxy.AbstractDeviceProxy;
 import com.whizzosoftware.hobson.api.plugin.HobsonPlugin;
 import com.whizzosoftware.hobson.api.property.PropertyConstraintType;
 import com.whizzosoftware.hobson.api.property.PropertyContainer;
 import com.whizzosoftware.hobson.api.property.TypedProperty;
-import com.whizzosoftware.hobson.api.variable.HobsonVariable;
-import com.whizzosoftware.hobson.api.variable.VariableConstants;
-import com.whizzosoftware.hobson.api.variable.VariableMediaType;
+import com.whizzosoftware.hobson.api.variable.*;
 
-public class SampleCameraDevice extends AbstractHobsonDevice {
+public class SampleCameraDevice extends AbstractDeviceProxy {
     public static final String CONFIG_USERNAME = "username";
     public static final String CONFIG_PASSWORD = "password";
 
     public SampleCameraDevice(HobsonPlugin plugin, String id) {
-        super(plugin, id);
+        super(plugin, id, "Sample Camera");
     }
 
     @Override
     public void onStartup(PropertyContainer config) {
         super.onStartup(config);
 
-        publishVariable(VariableConstants.IMAGE_STATUS_URL, "http://hobson-automation.com/img/security-example.jpg", HobsonVariable.Mask.READ_ONLY, null, VariableMediaType.IMAGE_JPG);
+        setVariableValue(VariableConstants.IMAGE_STATUS_URL, "http://hobson-automation.com/img/security-example.jpg", System.currentTimeMillis());
     }
 
     @Override
@@ -37,7 +35,12 @@ public class SampleCameraDevice extends AbstractHobsonDevice {
     }
 
     @Override
-    public DeviceType getType() {
+    public void onDeviceConfigurationUpdate(PropertyContainer config) {
+
+    }
+
+    @Override
+    public DeviceType getDeviceType() {
         return DeviceType.CAMERA;
     }
 
@@ -57,17 +60,19 @@ public class SampleCameraDevice extends AbstractHobsonDevice {
     }
 
     @Override
-    public String getDefaultName() {
-        return "Security Camera";
-    }
-
-    @Override
     public String getPreferredVariableName() {
         return VariableConstants.IMAGE_STATUS_URL;
     }
 
     @Override
-    protected TypedProperty[] createSupportedProperties() {
+    public DeviceVariableDescription[] createVariableDescriptions() {
+        return new DeviceVariableDescription[] {
+            createDeviceVariableDescription(VariableConstants.IMAGE_STATUS_URL, DeviceVariableDescription.Mask.READ_ONLY, VariableMediaType.IMAGE_JPG)
+        };
+    }
+
+    @Override
+    protected TypedProperty[] createConfigurationPropertyTypes() {
         return new TypedProperty[] {
             new TypedProperty.Builder(CONFIG_USERNAME, "Username", "A username that can access the camera", TypedProperty.Type.STRING).
                 constraint(PropertyConstraintType.required, true).

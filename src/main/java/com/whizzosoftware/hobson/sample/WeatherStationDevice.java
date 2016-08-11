@@ -1,17 +1,21 @@
 package com.whizzosoftware.hobson.sample;
 
-import com.whizzosoftware.hobson.api.device.AbstractHobsonDevice;
 import com.whizzosoftware.hobson.api.device.DeviceType;
+import com.whizzosoftware.hobson.api.device.proxy.AbstractDeviceProxy;
 import com.whizzosoftware.hobson.api.plugin.HobsonPlugin;
 import com.whizzosoftware.hobson.api.property.PropertyContainer;
 import com.whizzosoftware.hobson.api.property.TypedProperty;
-import com.whizzosoftware.hobson.api.variable.HobsonVariable;
+import com.whizzosoftware.hobson.api.variable.DeviceVariableContext;
+import com.whizzosoftware.hobson.api.variable.DeviceVariableDescription;
 import com.whizzosoftware.hobson.api.variable.VariableConstants;
 
-public class WeatherStationDevice extends AbstractHobsonDevice {
+import java.util.HashMap;
+import java.util.Map;
+
+public class WeatherStationDevice extends AbstractDeviceProxy {
 
     public WeatherStationDevice(HobsonPlugin plugin, String id) {
-        super(plugin, id);
+        super(plugin, id, "Weather Station");
     }
 
     @Override
@@ -19,26 +23,26 @@ public class WeatherStationDevice extends AbstractHobsonDevice {
         super.onStartup(config);
 
         long now = System.currentTimeMillis();
-        publishVariable(VariableConstants.OUTDOOR_TEMP_F, 74, HobsonVariable.Mask.READ_ONLY, now);
-        publishVariable(VariableConstants.INDOOR_TEMP_F, 76, HobsonVariable.Mask.READ_ONLY, now);
-        publishVariable(VariableConstants.INDOOR_RELATIVE_HUMIDITY, 32, HobsonVariable.Mask.READ_ONLY, now);
-        publishVariable(VariableConstants.OUTDOOR_RELATIVE_HUMIDITY, 30, HobsonVariable.Mask.READ_ONLY, now);
-        publishVariable(VariableConstants.WIND_SPEED_MPH, 2, HobsonVariable.Mask.READ_ONLY, now);
-        publishVariable(VariableConstants.WIND_DIRECTION_DEGREES, 270, HobsonVariable.Mask.READ_ONLY, now);
+
+        Map<String,Object> updates = new HashMap<>();
+        updates.put(VariableConstants.OUTDOOR_TEMP_F, 74);
+        updates.put(VariableConstants.INDOOR_TEMP_F, 76);
+        updates.put(VariableConstants.INDOOR_RELATIVE_HUMIDITY, 32);
+        updates.put(VariableConstants.OUTDOOR_RELATIVE_HUMIDITY, 30);
+        updates.put(VariableConstants.WIND_SPEED_MPH, 2);
+        updates.put(VariableConstants.WIND_DIRECTION_DEGREES, 270);
+        setVariableValues(updates);
     }
 
     @Override
-    public String getDefaultName() {
-        return "Weather Station";
+    protected TypedProperty[] createConfigurationPropertyTypes() {
+        return new TypedProperty[] {
+            new TypedProperty.Builder("foo", "Foo", "The foo thang", TypedProperty.Type.STRING).build()
+        };
     }
 
     @Override
-    protected TypedProperty[] createSupportedProperties() {
-        return null;
-    }
-
-    @Override
-    public DeviceType getType() {
+    public DeviceType getDeviceType() {
         return DeviceType.WEATHER_STATION;
     }
 
@@ -63,12 +67,26 @@ public class WeatherStationDevice extends AbstractHobsonDevice {
     }
 
     @Override
-    public void onShutdown() {
+    public DeviceVariableDescription[] createVariableDescriptions() {
+        return new DeviceVariableDescription[] {
+            createDeviceVariableDescription(VariableConstants.OUTDOOR_TEMP_F, DeviceVariableDescription.Mask.READ_ONLY),
+            createDeviceVariableDescription(VariableConstants.INDOOR_TEMP_F, DeviceVariableDescription.Mask.READ_ONLY),
+            createDeviceVariableDescription(VariableConstants.INDOOR_RELATIVE_HUMIDITY, DeviceVariableDescription.Mask.READ_ONLY),
+            createDeviceVariableDescription(VariableConstants.OUTDOOR_RELATIVE_HUMIDITY, DeviceVariableDescription.Mask.READ_ONLY),
+            createDeviceVariableDescription(VariableConstants.WIND_SPEED_MPH, DeviceVariableDescription.Mask.READ_ONLY),
+            createDeviceVariableDescription(VariableConstants.WIND_DIRECTION_DEGREES, DeviceVariableDescription.Mask.READ_ONLY)
+        };
+    }
 
+    @Override
+    public void onShutdown() {
+    }
+
+    @Override
+    public void onDeviceConfigurationUpdate(PropertyContainer config) {
     }
 
     @Override
     public void onSetVariable(String variableName, Object value) {
-
     }
 }

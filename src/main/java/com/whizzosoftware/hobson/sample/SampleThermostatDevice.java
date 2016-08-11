@@ -7,17 +7,19 @@
  *******************************************************************************/
 package com.whizzosoftware.hobson.sample;
 
-import com.whizzosoftware.hobson.api.device.AbstractHobsonDevice;
 import com.whizzosoftware.hobson.api.device.DeviceType;
+import com.whizzosoftware.hobson.api.device.proxy.AbstractDeviceProxy;
 import com.whizzosoftware.hobson.api.plugin.HobsonPlugin;
 import com.whizzosoftware.hobson.api.property.PropertyContainer;
 import com.whizzosoftware.hobson.api.property.TypedProperty;
-import com.whizzosoftware.hobson.api.variable.HobsonVariable;
-import com.whizzosoftware.hobson.api.variable.VariableConstants;
+import com.whizzosoftware.hobson.api.variable.*;
 
-public class SampleThermostatDevice extends AbstractHobsonDevice {
+import java.util.HashMap;
+import java.util.Map;
+
+public class SampleThermostatDevice extends AbstractDeviceProxy {
     public SampleThermostatDevice(HobsonPlugin plugin, String id) {
-        super(plugin, id);
+        super(plugin, id, "Thermostat");
     }
 
     private double currentTemp = 73.123;
@@ -27,8 +29,10 @@ public class SampleThermostatDevice extends AbstractHobsonDevice {
     public void onStartup(PropertyContainer config) {
         super.onStartup(config);
 
-        publishVariable(VariableConstants.INDOOR_TEMP_F, currentTemp, HobsonVariable.Mask.READ_ONLY, lastTempChange);
-        publishVariable(VariableConstants.TARGET_TEMP_F, 74.0, HobsonVariable.Mask.READ_WRITE, lastTempChange);
+        Map<String,Object> updates = new HashMap<>();
+        updates.put(VariableConstants.INDOOR_TEMP_F, currentTemp);
+        updates.put(VariableConstants.TARGET_TEMP_F, 74.0);
+        setVariableValues(updates);
     }
 
     @Override
@@ -36,7 +40,12 @@ public class SampleThermostatDevice extends AbstractHobsonDevice {
     }
 
     @Override
-    public DeviceType getType() {
+    public void onDeviceConfigurationUpdate(PropertyContainer config) {
+
+    }
+
+    @Override
+    public DeviceType getDeviceType() {
         return DeviceType.THERMOSTAT;
     }
 
@@ -56,32 +65,34 @@ public class SampleThermostatDevice extends AbstractHobsonDevice {
     }
 
     @Override
-    public String getDefaultName() {
-        return "Thermostat";
-    }
-
-    @Override
     public String getPreferredVariableName() {
         return VariableConstants.INDOOR_TEMP_F;
     }
 
     @Override
-    protected TypedProperty[] createSupportedProperties() {
+    public DeviceVariableDescription[] createVariableDescriptions() {
+        return new DeviceVariableDescription[] {
+            createDeviceVariableDescription(VariableConstants.INDOOR_TEMP_F, DeviceVariableDescription.Mask.READ_ONLY),
+            createDeviceVariableDescription(VariableConstants.TARGET_TEMP_F, DeviceVariableDescription.Mask.READ_WRITE)
+        };
+    }
+
+    @Override
+    protected TypedProperty[] createConfigurationPropertyTypes() {
         return null;
     }
 
     @Override
     public void onSetVariable(String name, Object value) {
-        fireVariableUpdateNotification(name, value);
+        setVariableValue(name, value, System.currentTimeMillis());
     }
 
     public void onRefresh(boolean availability, long now) {
         // if 5 minutes have passed, change the current temperature
         if (now - lastTempChange >= 300000) {
             updateCurrentTemp(now);
-            fireVariableUpdateNotification(VariableConstants.INDOOR_TEMP_F, currentTemp);
+            setVariableValue(VariableConstants.INDOOR_TEMP_F, currentTemp, System.currentTimeMillis());
         }
-
         setDeviceAvailability(availability, now);
     }
 

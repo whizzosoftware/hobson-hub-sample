@@ -7,7 +7,6 @@
  *******************************************************************************/
 package com.whizzosoftware.hobson.sample;
 
-import com.whizzosoftware.hobson.api.device.DeviceContext;
 import com.whizzosoftware.hobson.api.plugin.AbstractHobsonPlugin;
 import com.whizzosoftware.hobson.api.plugin.PluginStatus;
 import com.whizzosoftware.hobson.api.property.PropertyContainer;
@@ -50,11 +49,11 @@ public class SamplePlugin extends AbstractHobsonPlugin {
         ws = new WeatherStationDevice(this, "wstation");
         thermostat = new SampleThermostatDevice(this, "thermostat");
 
-        publishDevice(bulb);
-        publishDevice(sw);
-        publishDevice(camera);
-        publishDevice(ws);
-        publishDevice(thermostat);
+        registerDeviceProxy(bulb);
+        registerDeviceProxy(sw);
+        registerDeviceProxy(camera);
+        registerDeviceProxy(ws);
+        registerDeviceProxy(thermostat);
 
         BundleContext context = FrameworkUtil.getBundle(getClass()).getBundleContext();
         Hashtable<String,Object> c = new Hashtable<>();
@@ -77,7 +76,7 @@ public class SamplePlugin extends AbstractHobsonPlugin {
     }
 
     @Override
-    protected TypedProperty[] createSupportedProperties() {
+    protected TypedProperty[] getConfigurationPropertyTypes() {
         return new TypedProperty[] {
             new TypedProperty.Builder("test", "Test", "A test parameter", TypedProperty.Type.STRING).build()
         };
@@ -93,10 +92,10 @@ public class SamplePlugin extends AbstractHobsonPlugin {
         long now = System.currentTimeMillis();
 
         // check-in devices so they don't display as inactive
-        bulb.setDeviceAvailability(getAvailability("bulb"), now);
-        sw.setDeviceAvailability(getAvailability("switch"), now);
-        camera.setDeviceAvailability(getAvailability("camera"), now);
-        ws.setDeviceAvailability(getAvailability("wstation"), now);
+        setDeviceAvailability(bulb.getDeviceId(), getAvailability("bulb"), now);
+        setDeviceAvailability(sw.getDeviceId(), getAvailability("switch"), now);
+        setDeviceAvailability(camera.getDeviceId(), getAvailability("camera"), now);
+        setDeviceAvailability(ws.getDeviceId(), getAvailability("wstation"), now);
 
         // refresh the thermostat temperature
         thermostat.onRefresh(getAvailability("thermostat"), now);
@@ -109,7 +108,7 @@ public class SamplePlugin extends AbstractHobsonPlugin {
 
     public void setAvailability(String name, boolean avail) {
         availMap.put(name, avail);
-        setDeviceAvailability(DeviceContext.createLocal("com.whizzosoftware.hobson.hub.hobson-hub-sample", name), avail, null);
+        setDeviceAvailability(name, avail, null);
     }
 
     public boolean getAvailability(String name) {

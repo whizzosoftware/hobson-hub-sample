@@ -7,36 +7,36 @@
  *******************************************************************************/
 package com.whizzosoftware.hobson.sample;
 
-import com.whizzosoftware.hobson.api.device.AbstractHobsonDevice;
 import com.whizzosoftware.hobson.api.device.DeviceType;
+import com.whizzosoftware.hobson.api.device.proxy.AbstractDeviceProxy;
 import com.whizzosoftware.hobson.api.plugin.HobsonPlugin;
 import com.whizzosoftware.hobson.api.property.PropertyContainer;
 import com.whizzosoftware.hobson.api.property.TypedProperty;
-import com.whizzosoftware.hobson.api.variable.HobsonVariable;
+import com.whizzosoftware.hobson.api.variable.DeviceVariableDescription;
 import com.whizzosoftware.hobson.api.variable.VariableConstants;
 
-public class SampleSwitchDevice extends AbstractHobsonDevice {
+public class SampleSwitchDevice extends AbstractDeviceProxy {
     public SampleSwitchDevice(HobsonPlugin plugin, String id) {
-        super(plugin, id);
+        super(plugin, id, "Switchable Outlet");
     }
 
     @Override
     public void onStartup(PropertyContainer config) {
         super.onStartup(config);
 
-        publishVariable(VariableConstants.ON, false, HobsonVariable.Mask.READ_WRITE, System.currentTimeMillis());
+        setVariableValue(VariableConstants.ON, false, System.currentTimeMillis());
     }
 
     @Override
     public void onShutdown() {
     }
 
-    public String getDefaultName() {
-        return "Switchable Outlet";
+    @Override
+    public void onDeviceConfigurationUpdate(PropertyContainer config) {
     }
 
     @Override
-    public DeviceType getType() {
+    public DeviceType getDeviceType() {
         return DeviceType.SWITCH;
     }
 
@@ -61,12 +61,19 @@ public class SampleSwitchDevice extends AbstractHobsonDevice {
     }
 
     @Override
-    protected TypedProperty[] createSupportedProperties() {
+    public DeviceVariableDescription[] createVariableDescriptions() {
+        return new DeviceVariableDescription[] {
+            createDeviceVariableDescription(VariableConstants.ON, DeviceVariableDescription.Mask.READ_WRITE)
+        };
+    }
+
+    @Override
+    protected TypedProperty[] createConfigurationPropertyTypes() {
         return null;
     }
 
     @Override
     public void onSetVariable(String name, Object value) {
-        fireVariableUpdateNotification(name, value);
+        setVariableValue(name, value, System.currentTimeMillis());
     }
 }
