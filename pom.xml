@@ -3,7 +3,7 @@
     <groupId>com.whizzosoftware.hobson.hub</groupId>
     <artifactId>hobson-hub-sample</artifactId>
     <packaging>bundle</packaging>
-    <version>0.6.1-SNAPSHOT</version>
+    <version>0.7.0-SNAPSHOT</version>
     <name>Sample Devices</name>
     <description>Provides some sample devices for testing purposes.</description>
     <dependencies>
@@ -40,7 +40,7 @@
         <dependency>
             <groupId>com.whizzosoftware.hobson.hub</groupId>
             <artifactId>hobson-hub-api</artifactId>
-            <version>0.9.1-SNAPSHOT</version>
+            <version>0.10.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -69,7 +69,7 @@
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
-                        <Import-Package>org.osgi.framework,org.osgi.service.cm,org.apache.felix.dm,org.apache.felix.shell,org.slf4j,com.whizzosoftware.hobson.api.*;version="[0.9.0,0.10)</Import-Package>
+                        <Import-Package>org.osgi.framework,org.osgi.service.cm,org.apache.felix.dm,org.apache.felix.shell,org.slf4j,com.whizzosoftware.hobson.api.*;version="[0.10.0,0.11)</Import-Package>
                         <Bundle-Activator>com.whizzosoftware.hobson.api.osgi.activator.HobsonBundleActivator</Bundle-Activator>
                         <Provide-Capability>hobson.plugin=com.whizzosoftware.hobson.sample.SamplePlugin</Provide-Capability>
                         <Bundle-Category>hobson-plugin</Bundle-Category>
