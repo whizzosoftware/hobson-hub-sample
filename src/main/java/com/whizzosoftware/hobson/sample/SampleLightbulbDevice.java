@@ -8,35 +8,32 @@
 package com.whizzosoftware.hobson.sample;
 
 import com.whizzosoftware.hobson.api.device.DeviceType;
-import com.whizzosoftware.hobson.api.device.proxy.AbstractDeviceProxy;
+import com.whizzosoftware.hobson.api.device.proxy.AbstractHobsonDeviceProxy;
 import com.whizzosoftware.hobson.api.plugin.HobsonPlugin;
-import com.whizzosoftware.hobson.api.property.PropertyContainer;
 import com.whizzosoftware.hobson.api.property.TypedProperty;
 import com.whizzosoftware.hobson.api.variable.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
 import java.util.Map;
 
-public class SampleLightbulbDevice extends AbstractDeviceProxy {
+public class SampleLightbulbDevice extends AbstractHobsonDeviceProxy {
     private static final Logger logger = LoggerFactory.getLogger(SampleLightbulbDevice.class);
 
     public SampleLightbulbDevice(HobsonPlugin plugin, String id) {
-        super(plugin, id, "Color LED Bulb");
+        super(plugin, id, "Color LED Bulb", DeviceType.LIGHTBULB);
     }
 
     @Override
-    public void onStartup(PropertyContainer config) {
-        super.onStartup(config);
-
+    public void onStartup(String name, Map<String,Object> config) {
         logger.info("Lighbulb device is starting");
 
-        Map<String,Object> updates = new HashMap<>();
-        updates.put(VariableConstants.COLOR, "#0000ff");
-        updates.put(VariableConstants.LEVEL, 100);
-        updates.put(VariableConstants.ON, true);
-        setVariableValues(updates);
+        long now = System.currentTimeMillis();
+        publishVariables(
+            createDeviceVariable(VariableConstants.COLOR, VariableMask.READ_WRITE, "#0000ff", now),
+            createDeviceVariable(VariableConstants.LEVEL, VariableMask.READ_WRITE, 100, now),
+            createDeviceVariable(VariableConstants.ON, VariableMask.READ_WRITE, true, now)
+        );
     }
 
     @Override
@@ -46,13 +43,8 @@ public class SampleLightbulbDevice extends AbstractDeviceProxy {
     }
 
     @Override
-    public void onDeviceConfigurationUpdate(PropertyContainer config) {
+    public void onDeviceConfigurationUpdate(Map<String,Object> config) {
 
-    }
-
-    @Override
-    public DeviceType getDeviceType() {
-        return DeviceType.LIGHTBULB;
     }
 
     @Override
@@ -76,25 +68,16 @@ public class SampleLightbulbDevice extends AbstractDeviceProxy {
     }
 
     @Override
-    public DeviceVariableDescription[] createVariableDescriptions() {
-        return new DeviceVariableDescription[] {
-            createDeviceVariableDescription(VariableConstants.COLOR, DeviceVariableDescription.Mask.READ_WRITE),
-            createDeviceVariableDescription(VariableConstants.LEVEL, DeviceVariableDescription.Mask.READ_WRITE),
-            createDeviceVariableDescription(VariableConstants.ON, DeviceVariableDescription.Mask.READ_WRITE)
-        };
-    }
-
-    @Override
-    protected TypedProperty[] createConfigurationPropertyTypes() {
+    protected TypedProperty[] getConfigurationPropertyTypes() {
         return null;
     }
 
     @Override
-    public void onSetVariable(String name, Object value) {
-        logger.info("Received set device variable request: {}, {}", name, value);
+    public void onSetVariables(Map<String,Object> values) {
+        logger.info("Received set device variable request: {}", values);
 
-        // TODO: control device
-
-        setVariableValue(name, value, System.currentTimeMillis());
+        for (String name : values.keySet()) {
+            setVariableValue(name, values.get(name), System.currentTimeMillis());
+        }
     }
 }

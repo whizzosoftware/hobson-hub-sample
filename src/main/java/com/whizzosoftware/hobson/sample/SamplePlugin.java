@@ -1,10 +1,12 @@
-/*******************************************************************************
+/*
+ *******************************************************************************
  * Copyright (c) 2014 Whizzo Software, LLC.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *******************************************************************************/
+ *******************************************************************************
+*/
 package com.whizzosoftware.hobson.sample;
 
 import com.whizzosoftware.hobson.api.plugin.AbstractHobsonPlugin;
@@ -16,22 +18,14 @@ import org.osgi.framework.FrameworkUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
 public class SamplePlugin extends AbstractHobsonPlugin {
     private static final Logger logger = LoggerFactory.getLogger(SamplePlugin.class);
 
-    private SampleLightbulbDevice bulb;
-    private SampleSwitchDevice sw;
-    private SampleCameraDevice camera;
-    private SampleThermostatDevice thermostat;
-    private WeatherStationDevice ws;
-    private Map<String,Boolean> availMap = new HashMap<>();
-
-    public SamplePlugin(String pluginId) {
-        super(pluginId);
+    public SamplePlugin(String pluginId, String version, String description) {
+        super(pluginId, version, description);
     }
 
     @Override
@@ -43,23 +37,17 @@ public class SamplePlugin extends AbstractHobsonPlugin {
     public void onStartup(PropertyContainer config) {
         logger.info("Plugin is starting up");
 
-        bulb = new SampleLightbulbDevice(this, "bulb");
-        sw = new SampleSwitchDevice(this, "switch");
-        camera = new SampleCameraDevice(this, "camera");
-        ws = new WeatherStationDevice(this, "wstation");
-        thermostat = new SampleThermostatDevice(this, "thermostat");
-
-        registerDeviceProxy(bulb);
-        registerDeviceProxy(sw);
-        registerDeviceProxy(camera);
-        registerDeviceProxy(ws);
-        registerDeviceProxy(thermostat);
+        publishDeviceProxy(new SampleLightbulbDevice(this, "bulb"));
+        publishDeviceProxy(new SampleSwitchDevice(this, "switch"));
+        publishDeviceProxy(new SampleCameraDevice(this, "camera"));
+        publishDeviceProxy(new WeatherStationDevice(this, "wstation"));
+        publishDeviceProxy(new SampleThermostatDevice(this, "thermostat"));
 
         BundleContext context = FrameworkUtil.getBundle(getClass()).getBundleContext();
         Hashtable<String,Object> c = new Hashtable<>();
         c.put("osgi.command.scope", "sample");
         c.put("osgi.command.function", new String[] {
-                "avail"
+            "avail"
         });
         context.registerService(
             SampleCommandHandler.class.getName(),
@@ -84,7 +72,7 @@ public class SamplePlugin extends AbstractHobsonPlugin {
 
     @Override
     public long getRefreshInterval() {
-        return 30;
+        return 60;
     }
 
     @Override
@@ -92,13 +80,13 @@ public class SamplePlugin extends AbstractHobsonPlugin {
         long now = System.currentTimeMillis();
 
         // check-in devices so they don't display as inactive
-        setDeviceAvailability(bulb.getDeviceId(), getAvailability("bulb"), now);
-        setDeviceAvailability(sw.getDeviceId(), getAvailability("switch"), now);
-        setDeviceAvailability(camera.getDeviceId(), getAvailability("camera"), now);
-        setDeviceAvailability(ws.getDeviceId(), getAvailability("wstation"), now);
+        getDeviceProxy("bulb").setLastCheckin(now);
+        getDeviceProxy("switch").setLastCheckin(now);
+        getDeviceProxy("camera").setLastCheckin(now);
+        getDeviceProxy("wstation").setLastCheckin(now);
 
         // refresh the thermostat temperature
-        thermostat.onRefresh(getAvailability("thermostat"), now);
+        ((SampleThermostatDevice)getDeviceProxy("thermostat")).onRefresh(now);
     }
 
     @Override
@@ -106,13 +94,7 @@ public class SamplePlugin extends AbstractHobsonPlugin {
         logger.info("Received plugin configuration update");
     }
 
-    public void setAvailability(String name, boolean avail) {
-        availMap.put(name, avail);
-        setDeviceAvailability(name, avail, null);
-    }
-
-    public boolean getAvailability(String name) {
-        Boolean b = availMap.get(name);
-        return (b == null || b);
+    public void setDeviceAvailability(String deviceId, boolean available) {
+        getDeviceProxy(deviceId).setLastCheckin(available ? System.currentTimeMillis() : System.currentTimeMillis() - 700000);
     }
 }

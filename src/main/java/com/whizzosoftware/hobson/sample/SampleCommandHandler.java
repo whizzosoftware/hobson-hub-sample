@@ -26,6 +26,6 @@ public class SampleCommandHandler {
      * @param available the device's current availability
      */
     public void avail(String deviceId, String available) {
-        plugin.setAvailability(deviceId, "true".equals(available));
+        plugin.setDeviceAvailability(deviceId, Boolean.parseBoolean(available));
     }
 }
